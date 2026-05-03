@@ -30,5 +30,6 @@ export default defineConfig(
       },
     },
   },
-  includeIgnoreFile(gitignorePath)
+  includeIgnoreFile(gitignorePath),
+  { ignores: ["src/sanity/types.ts"] }
 )
