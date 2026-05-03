@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     fetches: { fullUrl: true },
   },
 
-  // typedRoutes: true,
+  typedRoutes: true,
   // cacheComponents: true,
 }
 

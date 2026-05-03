@@ -279,7 +279,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries.ts
 // Variable: getCategories
-// Query: *[_type == "category" && defined(slug.current)] | order(_createdAt asc){  _id, _type, title, slug, description, createdAt,}
+// Query: *[_type == "category" && defined(slug.current)] | order(_createdAt asc){  _id, _type, title, slug, description, createdAt,  }
 export type GetCategoriesResult = Array<{
   _id: string
   _type: "category"
@@ -289,10 +289,50 @@ export type GetCategoriesResult = Array<{
   createdAt: null
 }>
 
+// Source: src/sanity/queries.ts
+// Variable: getPosts
+// Query: *[_type == "post" && defined(slug.current)]{  _id, _createdAt, _updatedAt, categories, title, slug,  "categories": categories[]->{_id, title, slug}  }
+export type GetPostsResult = Array<{
+  _id: string
+  _createdAt: string
+  _updatedAt: string
+  categories: Array<{
+    _id: string
+    title: string | null
+    slug: Slug | null
+  }> | null
+  title: string | null
+  slug: Slug
+}>
+
+// Source: src/sanity/queries.ts
+// Variable: getPost
+// Query: *[_type == "post" && slug.current == $slug][0]{  _id, _createdAt, _updatedAt, _type, title, slug, body,  "author": author->{_id, name},  "categories": categories[]->{_id, title, slug}  }
+export type GetPostResult = {
+  _id: string
+  _createdAt: string
+  _updatedAt: string
+  _type: "post"
+  title: string | null
+  slug: Slug | null
+  body: BlockContent | null
+  author: {
+    _id: string
+    name: string | null
+  } | null
+  categories: Array<{
+    _id: string
+    title: string | null
+    slug: Slug | null
+  }> | null
+} | null
+
 // Query TypeMap
 import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "category" && defined(slug.current)] | order(_createdAt asc){\n  _id, _type, title, slug, description, createdAt,\n}': GetCategoriesResult
+    '\n  *[_type == "category" && defined(slug.current)] | order(_createdAt asc){\n  _id, _type, title, slug, description, createdAt,\n  }': GetCategoriesResult
+    '\n  *[_type == "post" && defined(slug.current)]{\n  _id, _createdAt, _updatedAt, categories, title, slug,\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostsResult
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n  _id, _createdAt, _updatedAt, _type, title, slug, body,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostResult
   }
 }
