@@ -16,8 +16,8 @@ export const getPosts = defineQuery(
     defined($category) => $category in categories[]->slug.current,
     true
   )
-  ]{
-  _id, _createdAt, _updatedAt, _type, categories, title, slug,
+  ] | order(publishedAt desc) {
+  _id, publishedAt , _type, categories, title, slug,
   "author": author->{_id, name},
   "categories": categories[]->{_id, title, slug}
   }`

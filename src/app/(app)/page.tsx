@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { getCategories, getPosts } from "@/sanity/queries"
-import CategoryFilter from "@/components/Filter"
+import CategoryFilter from "@/components/CategoryFilter"
 import { sanityFetch } from "@/sanity/lib/live"
 
 export default async function Home({
@@ -28,14 +28,14 @@ export default async function Home({
       <CategoryFilter categories={categories} />
 
       {posts.length === 0 && (
-        <div className="mt-8 rounded-md border border-dashed border-gray-600 px-4 py-10 text-center text-sm text-gray-500">
+        <div className="mt-8 rounded-md border border-dashed border-gray-300 px-4 py-10 text-center text-sm text-gray-500">
           No posts match the filters
         </div>
       )}
 
       <ul className="mt-8 flex flex-col gap-4">
         {posts.map((post) => (
-          <li className="rounded-md border border-gray-700 p-4" key={post._id}>
+          <li className="rounded-md border border-gray-300 p-4" key={post._id}>
             <Link
               className="text-lg font-semibold hover:underline"
               href={`/${post.slug.current}`}
@@ -43,13 +43,13 @@ export default async function Home({
               {post.title}
             </Link>
 
-            <p className="mt-1 text-sm text-gray-400">By {post.author.name}</p>
+            <p className="mt-1 text-sm text-gray-600">By {post.author.name}</p>
 
             {post.categories && post.categories.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
                 {post.categories.map((category) => (
                   <span
-                    className="rounded-full border border-gray-600 px-2 py-0.5 text-xs text-gray-400"
+                    className="rounded-full border border-gray-300 px-2 py-0.5 text-xs text-gray-600"
                     key={category._id}
                   >
                     {category.title}

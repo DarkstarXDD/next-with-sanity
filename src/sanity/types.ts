@@ -291,11 +291,10 @@ export type GetCategoriesResult = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: getPosts
-// Query: *[  _type == "post" &&  defined(slug.current) &&  select(    defined($category) => $category in categories[]->slug.current,    true  )  ]{  _id, _createdAt, _updatedAt, _type, categories, title, slug,  "author": author->{_id, name},  "categories": categories[]->{_id, title, slug}  }
+// Query: *[  _type == "post" &&  defined(slug.current) &&  select(    defined($category) => $category in categories[]->slug.current,    true  )  ] | order(publishedAt desc) {  _id, publishedAt , _type, categories, title, slug,  "author": author->{_id, name},  "categories": categories[]->{_id, title, slug}  }
 export type GetPostsResult = Array<{
   _id: string
-  _createdAt: string
-  _updatedAt: string
+  publishedAt: string | null
   _type: "post"
   categories: Array<{
     _id: string
@@ -337,7 +336,7 @@ import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "category" && defined(slug.current)] | order(_createdAt asc){\n  _id, _type, title, slug, description, createdAt,\n  }': GetCategoriesResult
-    '\n  *[\n  _type == "post" &&\n  defined(slug.current) &&\n  select(\n    defined($category) => $category in categories[]->slug.current,\n    true\n  )\n  ]{\n  _id, _createdAt, _updatedAt, _type, categories, title, slug,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostsResult
+    '\n  *[\n  _type == "post" &&\n  defined(slug.current) &&\n  select(\n    defined($category) => $category in categories[]->slug.current,\n    true\n  )\n  ] | order(publishedAt desc) {\n  _id, publishedAt , _type, categories, title, slug,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostsResult
     '\n  *[_type == "post" && slug.current == $slug][0]{\n  _id, _createdAt, _updatedAt, _type, title, slug, body,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostResult
   }
 }

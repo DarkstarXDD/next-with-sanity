@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-inter bg-zinc-800 text-white`}>
+      <body className={`${inter.variable} font-inter`}>
         {children}
         <SanityLive />
       </body>

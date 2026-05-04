@@ -28,7 +28,7 @@ export default function CategoryFilter({
   return (
     <div className="grid gap-2">
       <label
-        className="text-sm font-medium text-gray-300"
+        className="text-sm font-medium text-gray-600"
         htmlFor="category-select"
       >
         Select Category
