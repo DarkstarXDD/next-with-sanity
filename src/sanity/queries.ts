@@ -9,8 +9,16 @@ export const getCategories = defineQuery(
 
 export const getPosts = defineQuery(
   `
-  *[_type == "post" && defined(slug.current)]{
-  _id, _createdAt, _updatedAt, categories, title, slug,
+  *[
+  _type == "post" &&
+  defined(slug.current) &&
+  select(
+    defined($category) => $category in categories[]->slug.current,
+    true
+  )
+  ]{
+  _id, _createdAt, _updatedAt, _type, categories, title, slug,
+  "author": author->{_id, name},
   "categories": categories[]->{_id, title, slug}
   }`
 )

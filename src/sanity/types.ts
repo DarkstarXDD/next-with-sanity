@@ -43,8 +43,8 @@ export type Post = {
   _updatedAt: string
   _rev: string
   title?: string
-  slug?: Slug
-  author?: AuthorReference
+  slug: Slug
+  author: AuthorReference
   mainImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -291,11 +291,12 @@ export type GetCategoriesResult = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: getPosts
-// Query: *[_type == "post" && defined(slug.current)]{  _id, _createdAt, _updatedAt, categories, title, slug,  "categories": categories[]->{_id, title, slug}  }
+// Query: *[  _type == "post" &&  defined(slug.current) &&  select(    defined($category) => $category in categories[]->slug.current,    true  )  ]{  _id, _createdAt, _updatedAt, _type, categories, title, slug,  "author": author->{_id, name},  "categories": categories[]->{_id, title, slug}  }
 export type GetPostsResult = Array<{
   _id: string
   _createdAt: string
   _updatedAt: string
+  _type: "post"
   categories: Array<{
     _id: string
     title: string | null
@@ -303,6 +304,10 @@ export type GetPostsResult = Array<{
   }> | null
   title: string | null
   slug: Slug
+  author: {
+    _id: string
+    name: string | null
+  }
 }>
 
 // Source: src/sanity/queries.ts
@@ -314,12 +319,12 @@ export type GetPostResult = {
   _updatedAt: string
   _type: "post"
   title: string | null
-  slug: Slug | null
+  slug: Slug
   body: BlockContent | null
   author: {
     _id: string
     name: string | null
-  } | null
+  }
   categories: Array<{
     _id: string
     title: string | null
@@ -332,7 +337,7 @@ import "@sanity/client"
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "category" && defined(slug.current)] | order(_createdAt asc){\n  _id, _type, title, slug, description, createdAt,\n  }': GetCategoriesResult
-    '\n  *[_type == "post" && defined(slug.current)]{\n  _id, _createdAt, _updatedAt, categories, title, slug,\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostsResult
+    '\n  *[\n  _type == "post" &&\n  defined(slug.current) &&\n  select(\n    defined($category) => $category in categories[]->slug.current,\n    true\n  )\n  ]{\n  _id, _createdAt, _updatedAt, _type, categories, title, slug,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostsResult
     '\n  *[_type == "post" && slug.current == $slug][0]{\n  _id, _createdAt, _updatedAt, _type, title, slug, body,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, slug}\n  }': GetPostResult
   }
 }

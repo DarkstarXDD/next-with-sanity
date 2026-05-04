@@ -23,7 +23,8 @@
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "sanity": "5",
-    "styled-components": "6"
+    "styled-components": "6",
+    "use-debounce": "10.1.1"
   },
   "devDependencies": {
     "@eslint/compat": "2.0.5",

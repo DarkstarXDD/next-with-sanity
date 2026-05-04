@@ -17,11 +17,13 @@ export const postType = defineType({
       options: {
         source: "title",
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "author",
       type: "reference",
       to: { type: "author" },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "mainImage",
