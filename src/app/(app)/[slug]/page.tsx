@@ -2,8 +2,14 @@ import { notFound } from "next/navigation"
 import { PortableText } from "next-sanity"
 import Link from "next/link"
 
+import { getPosts, getPost } from "@/sanity/queries"
 import { sanityFetch } from "@/sanity/lib/live"
-import { getPost } from "@/sanity/queries"
+import { client } from "@/sanity/lib/client"
+
+export async function generateStaticParams() {
+  const posts = await client.fetch(getPosts, { category: null })
+  return posts.map((post) => post.slug)
+}
 
 export default async function PostPage({ params }: PageProps<"/[slug]">) {
   const { slug } = await params
