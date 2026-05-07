@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
     fetches: { fullUrl: true },
   },
 
+  experimental: {
+    prefetchInlining: true,
+  },
+
   typedRoutes: true,
   // cacheComponents: true,
 }
